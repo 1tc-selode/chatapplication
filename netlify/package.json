@@ -1,0 +1,11 @@
+{
+  "name": "netlify-edge-functions",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@netlify/edge-functions": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

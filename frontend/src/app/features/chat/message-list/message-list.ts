@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Api } from '../../../core/api/api';
 import { Message } from '../../../core/models/chat.model';
@@ -9,12 +9,13 @@ import { Message } from '../../../core/models/chat.model';
   templateUrl: './message-list.html',
   styleUrl: './message-list.css',
 })
-export class MessageList implements OnInit, OnChanges {
+export class MessageList implements OnInit, OnChanges, OnDestroy {
   @Input() roomId!: number;
   @Input() currentUser: any = null;
   
   messages: Message[] = [];
   isLoading = false;
+  private refreshInterval: any;
 
   constructor(
     private apiService: Api,
@@ -24,12 +25,32 @@ export class MessageList implements OnInit, OnChanges {
   ngOnInit() {
     if (this.roomId) {
       this.loadMessages();
+      this.startAutoRefresh();
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['roomId'] && !changes['roomId'].firstChange) {
+      this.stopAutoRefresh();
       this.loadMessages();
+      this.startAutoRefresh();
+    }
+  }
+
+  ngOnDestroy() {
+    this.stopAutoRefresh();
+  }
+
+  startAutoRefresh() {
+    // Refresh messages every 3 seconds
+    this.refreshInterval = setInterval(() => {
+      this.loadMessagesQuietly();
+    }, 3000);
+  }
+
+  stopAutoRefresh() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
     }
   }
 
@@ -45,6 +66,19 @@ export class MessageList implements OnInit, OnChanges {
         console.error('Error loading messages:', error);
         this.isLoading = false;
         this.cdr.detectChanges();
+      }
+    });
+  }
+
+  loadMessagesQuietly() {
+    // Load messages without showing loading indicator
+    this.apiService.getMessages(this.roomId).subscribe({
+      next: (response) => {
+        this.messages = response.data.reverse();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading messages:', error);
       }
     });
   }

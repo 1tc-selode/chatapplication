@@ -8,7 +8,7 @@ import { User, LoginRequest, RegisterRequest, AuthResponse } from '../models/use
   providedIn: 'root',
 })
 export class Auth {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = '/api'; // Use relative URL for Netlify Edge Functions
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 

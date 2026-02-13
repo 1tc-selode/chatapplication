@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Api } from '../../../core/api/api';
 import { Message } from '../../../core/models/chat.model';
@@ -9,13 +9,15 @@ import { Message } from '../../../core/models/chat.model';
   templateUrl: './message-list.html',
   styleUrl: './message-list.css',
 })
-export class MessageList implements OnInit, OnChanges, OnDestroy {
+export class MessageList implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() roomId!: number;
   @Input() currentUser: any = null;
+  @ViewChild('messageContainer') private messageContainer?: ElementRef;
   
   messages: Message[] = [];
   isLoading = false;
   private refreshInterval: any;
+  private shouldScrollToBottom = false;
 
   constructor(
     private apiService: Api,
@@ -41,6 +43,13 @@ export class MessageList implements OnInit, OnChanges, OnDestroy {
     this.stopAutoRefresh();
   }
 
+  ngAfterViewChecked() {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
+    }
+  }
+
   startAutoRefresh() {
     // Refresh messages every 3 seconds
     this.refreshInterval = setInterval(() => {
@@ -60,6 +69,7 @@ export class MessageList implements OnInit, OnChanges, OnDestroy {
       next: (response) => {
         this.messages = response.data.reverse();
         this.isLoading = false;
+        this.shouldScrollToBottom = true;
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -74,13 +84,30 @@ export class MessageList implements OnInit, OnChanges, OnDestroy {
     // Load messages without showing loading indicator
     this.apiService.getMessages(this.roomId).subscribe({
       next: (response) => {
+        const oldLength = this.messages.length;
         this.messages = response.data.reverse();
+        
+        // Only scroll if new messages arrived
+        if (this.messages.length > oldLength) {
+          this.shouldScrollToBottom = true;
+        }
+        
         this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error loading messages:', error);
       }
     });
+  }
+
+  scrollToBottom(): void {
+    try {
+      if (this.messageContainer) {
+        this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+      }
+    } catch(err) {
+      console.error('Scroll error:', err);
+    }
   }
 
   deleteMessage(messageId: number) {

@@ -1,4 +1,4 @@
-<div class="message-list">
+<div class="message-list" #messageContainer>
   @if (isLoading) {
     <div class="loading">Loading messages...</div>
   } @else if (messages.length === 0) {

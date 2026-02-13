@@ -1,9 +1,15 @@
+:host {
+  display: block;
+  flex-shrink: 0;
+}
+
 .message-input {
   display: flex;
   gap: 12px;
   padding: 20px;
   background: white;
   border-top: 1px solid #e0e0e0;
+  flex-shrink: 0; /* Prevent input from shrinking */
 }
 
 .message-input textarea {

@@ -2,10 +2,18 @@
 nixPkgs = ['php82', 'php82Packages.composer']
 
 [phases.install]
-cmds = ['cd backend && composer install --no-dev --optimize-autoloader']
+cmds = [
+  'cd backend && composer install --no-dev --optimize-autoloader',
+  'cd backend && cp .env.production .env'
+]
 
 [phases.build]
-cmds = ['cd backend && php artisan config:cache', 'cd backend && php artisan route:cache']
+cmds = [
+  'cd backend && touch database/database.sqlite',
+  'cd backend && php artisan migrate --force',
+  'cd backend && php artisan config:cache',
+  'cd backend && php artisan route:cache'
+]
 
 [start]
 cmd = 'cd backend && php artisan serve --host=0.0.0.0 --port=$PORT'

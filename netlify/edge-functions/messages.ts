@@ -41,7 +41,13 @@ export default async (request: Request, context: Context) => {
           user: { id: m.user_id, name: m.user_name || 'User' }
         }));
 
-      return new Response(JSON.stringify(roomMessages), { headers });
+      // Return in Laravel pagination format
+      return new Response(JSON.stringify({
+        data: roomMessages,
+        current_page: 1,
+        total: roomMessages.length,
+        per_page: 50
+      }), { headers });
     }
 
     // POST new message

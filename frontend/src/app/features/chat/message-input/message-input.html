@@ -1,0 +1,16 @@
+<div class="message-input">
+  <textarea 
+    [formControl]="messageControl"
+    placeholder="Type a message..."
+    (keypress)="onKeyPress($event)"
+    rows="1"
+  ></textarea>
+  <button 
+    class="send-btn"
+    (click)="sendMessage()"
+    [disabled]="!messageControl.value?.trim() || isSending"
+  >
+    Send
+  </button>
+</div>
+

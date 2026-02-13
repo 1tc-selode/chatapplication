@@ -1,0 +1,36 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3>Channels</h3>
+  </div>
+
+  <div class="categories">
+    @for (category of categories; track category.id) {
+      <div class="category">
+        <div class="category-header" (click)="toggleCategory(category.id)">
+          <span class="category-icon">
+            {{ isCategoryExpanded(category.id) ? '▼' : '▶' }}
+          </span>
+          <span class="category-name">{{ category.name }}</span>
+        </div>
+
+        @if (isCategoryExpanded(category.id) && category.rooms) {
+          <div class="rooms">
+            @for (room of category.rooms; track room.id) {
+              <div 
+                class="room"
+                [class.active]="isRoomSelected(room)"
+                (click)="selectRoom(room)"
+              >
+                <span class="room-icon">
+                  {{ room.is_private ? '🔒' : '#' }}
+                </span>
+                <span class="room-name">{{ room.name }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

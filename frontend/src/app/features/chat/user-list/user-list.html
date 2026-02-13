@@ -1,0 +1,59 @@
+<div class="user-list">
+  <div class="user-list-header">
+    <h3>Members ({{ users.length }})</h3>
+  </div>
+
+  <div class="users">
+    @if (isLoading) {
+      <div class="loading">Loading...</div>
+    } @else {
+      <!-- Admins Section -->
+      @if (adminUsers.length > 0) {
+        <div class="user-section">
+          <div class="section-title">Admins ({{ adminUsers.length }})</div>
+          @for (user of adminUsers; track user.id) {
+            <div class="user">
+              <div class="user-avatar-wrapper">
+                <div class="user-avatar admin-avatar">
+                  {{ user.name?.charAt(0) || '?' }}
+                </div>
+                <span class="status-dot" [class.online]="user.is_online"></span>
+              </div>
+              <div class="user-info">
+                <div class="user-name">
+                  {{ user.name }}
+                </div>
+                <div class="user-status" [class.online]="user.is_online">
+                  {{ user.is_online ? 'Online' : 'Offline' }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Regular Users Section -->
+      @if (regularUsers.length > 0) {
+        <div class="user-section">
+          <div class="section-title">Users ({{ regularUsers.length }})</div>
+          @for (user of regularUsers; track user.id) {
+            <div class="user">
+              <div class="user-avatar-wrapper">
+                <div class="user-avatar">
+                  {{ user.name?.charAt(0) || '?' }}
+                </div>
+                <span class="status-dot" [class.online]="user.is_online"></span>
+              </div>
+              <div class="user-info">
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-status" [class.online]="user.is_online">
+                  {{ user.is_online ? 'Online' : 'Offline' }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

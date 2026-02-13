@@ -1,0 +1,28 @@
+<div class="message-list">
+  @if (isLoading) {
+    <div class="loading">Loading messages...</div>
+  } @else if (messages.length === 0) {
+    <div class="no-messages">No messages yet. Start the conversation!</div>
+  } @else {
+    @for (message of messages; track message.id) {
+      <div class="message" [class.own-message]="message.user_id === currentUser?.id">
+        <div class="message-avatar" [class.admin-avatar]="message.user?.is_admin">
+          {{ message.user?.name?.charAt(0) || '?' }}
+        </div>
+        <div class="message-content">
+          <div class="message-header">
+            <span class="message-author">{{ message.user?.name || 'Unknown' }}</span>
+            <span class="message-time">{{ message.created_at | date:'short' }}</span>
+          </div>
+          <div class="message-text">{{ message.content }}</div>
+          @if (message.user_id === currentUser?.id) {
+            <div class="message-actions">
+              <button class="btn-sm" (click)="deleteMessage(message.id)">Delete</button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>
+

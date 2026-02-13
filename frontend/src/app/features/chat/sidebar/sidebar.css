@@ -1,0 +1,86 @@
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.categories {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.category {
+  border-bottom: 1px solid var(--bg-hover);
+}
+
+.category-header {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.category-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.category-icon {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.category-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.rooms {
+  background: var(--bg-secondary);
+}
+
+.room {
+  padding: 10px 20px 10px 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  color: var(--text-tertiary);
+}
+
+.room:hover {
+  background: #efefef;
+}
+
+.room.active {
+  background: var(--primary-color);
+  color: var(--text-white);
+}
+
+.room-icon {
+  font-size: 14px;
+}
+
+.room-name {
+  font-size: 14px;
+}
+
+/* Dark Mode automatikusan működik a CSS változók miatt (lásd styles.css) */

@@ -1,0 +1,82 @@
+<div class="chat-container">
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="header-left">
+      <h1>💬 Chat Application</h1>
+      @if (currentUser) {
+        <span class="user-info">Welcome, {{ currentUser.name }}</span>
+      }
+    </div>
+    <div class="header-right">
+      @if (currentUser?.is_admin) {
+        <button class="admin-btn" routerLink="/admin">Admin Panel</button>
+      }
+      <button class="icon-btn" (click)="toggleDarkMode()" title="Toggle Dark Mode">
+        @if (darkMode) {
+          ☀️
+        } @else {
+          🌙
+        }
+      </button>
+      <button class="logout-btn" (click)="onLogout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Main Chat Area -->
+  <div class="chat-main">
+    <!-- Sidebar -->
+    <app-sidebar
+      [categories]="categories"
+      [selectedRoom]="selectedRoom"
+      [currentUser]="currentUser"
+      (roomSelected)="onRoomSelected($event)"
+      (categoriesChanged)="loadCategories()"
+    ></app-sidebar>
+
+    <!-- Chat Content -->
+    <div class="chat-content">
+      @if (selectedRoom) {
+        <div class="chat-room">
+          <!-- Room Header -->
+          <div class="room-header">
+            <div>
+              <h2>{{ selectedRoom.name }}</h2>
+              @if (selectedRoom.description) {
+                <p class="room-description">{{ selectedRoom.description }}</p>
+              }
+            </div>
+            @if (selectedRoom.is_private) {
+              <span class="private-badge">🔒 Private</span>
+            }
+          </div>
+
+          <!-- Messages -->
+          <app-message-list
+            #messageList
+            [roomId]="selectedRoom.id"
+            [currentUser]="currentUser"
+          ></app-message-list>
+
+          <!-- Message Input -->
+          <app-message-input
+            [roomId]="selectedRoom.id"
+            (messageSent)="onMessageSent()"
+          ></app-message-input>
+        </div>
+      } @else {
+        <div class="no-room-selected">
+          <h2>Welcome to Chat!</h2>
+          <p>Select a room from the sidebar to start chatting</p>
+        </div>
+      }
+    </div>
+
+    <!-- User List -->
+    @if (selectedRoom) {
+      <app-user-list
+        [roomId]="selectedRoom.id"
+      ></app-user-list>
+    }
+  </div>
+</div>
+

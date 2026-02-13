@@ -1,0 +1,103 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* ===== CSS Variables / Color Palette ===== */
+:root {
+  /* Primary Colors - Messenger Blue */
+  --primary-color: #0084ff;
+  --primary-dark: #0073e6;
+  --primary-light: #4da3ff;
+  --secondary-color: #0066cc;
+  --admin-color: #1e3a8a; /* Dark blue for admin avatars */
+  
+  /* No Gradients - Solid Colors Only */
+  --gradient-primary: #0084ff;
+  --gradient-primary-dark: #0073e6;
+  --gradient-admin: #0084ff;
+  
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f0f2f5;
+  --bg-tertiary: #e4e6eb;
+  --bg-hover: #f2f3f5;
+  --bg-active: #e7f3ff;
+  
+  /* Text Colors */
+  --text-primary: #050505;
+  --text-secondary: #65676b;
+  --text-tertiary: #8a8d91;
+  --text-muted: #b0b3b8;
+  --text-white: #ffffff;
+  
+  /* Border Colors */
+  --border-light: #e4e6eb;
+  --border-medium: #ced0d4;
+  --border-dark: #8a8d91;
+  
+  /* Status Colors */
+  --status-online: #31a24c;
+  --status-online-light: #42b72a;
+  --status-offline: #b0b3b8;
+  --status-success: #d4edda;
+  --status-success-text: #155724;
+  --status-success-border: #c3e6cb;
+  --status-error: #f8d7da;
+  --status-error-text: #721c24;
+  --status-error-border: #f5c6cb;
+  
+  /* Button Colors */
+  --btn-danger: #e4405f;
+  --btn-danger-hover: #d63653;
+  --btn-secondary: #8a8d91;
+  --btn-secondary-hover: #65676b;
+  
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-primary: 0 2px 8px rgba(0, 132, 255, 0.3);
+  
+  /* Sidebar */
+  --sidebar-width: 250px;
+  --user-list-width: 200px;
+}
+
+/* ===== Dark Mode Variables ===== */
+body.dark-mode {
+  /* Background Colors */
+  --bg-primary: #242526;
+  --bg-secondary: #18191a;
+  --bg-tertiary: #3a3b3c;
+  --bg-hover: #3a3b3c;
+  --bg-active: #263951;
+  
+  /* Text Colors */
+  --text-primary: #e4e6eb;
+  --text-secondary: #b0b3b8;
+  --text-tertiary: #8a8d91;
+  --text-muted: #65676b;
+  
+  /* Border Colors */
+  --border-light: #3a3b3c;
+  --border-medium: #3e4042;
+  --border-dark: #4e4f50;
+  
+  /* Status Colors */
+  --status-online-light: #42b72a;
+  
+  /* No Gradients - Keep Solid Colors */
+  --gradient-primary: #0084ff;
+  --gradient-primary-dark: #0073e6;
+  --gradient-admin: #0084ff;
+}
+
+/* ===== Global Styles ===== */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+* {
+  box-sizing: border-box;
+}

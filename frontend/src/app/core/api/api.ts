@@ -7,7 +7,8 @@ import { Category, Room, Message } from '../models/chat.model';
   providedIn: 'root',
 })
 export class Api {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  // Use relative URL - Netlify Edge Functions will handle /api/* requests
+  private apiUrl = '/api';
 
   constructor(private http: HttpClient) {}
 

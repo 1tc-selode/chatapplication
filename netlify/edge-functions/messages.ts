@@ -52,27 +52,47 @@ export default async (request: Request, context: Context) => {
 
     // POST new message
     if (request.method === 'POST') {
-      const body = await request.json();
-      let { room_id, user_id, content } = body;
+      // Parse FormData (frontend sends multipart/form-data for file upload support)
+      const formData = await request.formData();
+      let room_id = formData.get('room_id');
+      const user_id = formData.get('user_id');
+      const content = formData.get('content');
       
-      // If room_id not in body, try to get from URL path
+      // If room_id not in formData, try to get from URL path
       if (!room_id && roomId) {
         room_id = roomId;
       }
 
-      if (!room_id || !user_id || !content) {
+      if (!room_id || !content) {
         return new Response(
-          JSON.stringify({ error: 'room_id, user_id, and content required' }),
+          JSON.stringify({ error: 'room_id and content required' }),
           { status: 400, headers }
         );
       }
 
+      // Get user info from Authorization header or use mock data
+      const authHeader = request.headers.get('Authorization');
+      let userId = user_id ? parseInt(user_id as string) : 1;
+      let userName = 'User';
+      
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        try {
+          const token = authHeader.substring(7);
+          const decoded = atob(token);
+          const userData = JSON.parse(decoded);
+          userId = userData.id || userId;
+          userName = userData.name || userName;
+        } catch (e) {
+          // Use default values if token parsing fails
+        }
+      }
+
       const newMessage = {
         id: Date.now(),
-        room_id: parseInt(room_id),
-        user_id: parseInt(user_id),
-        user_name: body.user_name || 'User',
-        content,
+        room_id: parseInt(room_id as string),
+        user_id: userId,
+        user_name: userName,
+        content: content as string,
         created_at: new Date().toISOString()
       };
 

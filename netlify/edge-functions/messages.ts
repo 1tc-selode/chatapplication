@@ -19,7 +19,11 @@ export default async (request: Request, context: Context) => {
 
   try {
     const url = new URL(request.url);
-    const roomId = url.searchParams.get('room_id');
+    const pathname = url.pathname;
+    
+    // Extract room_id from URL path like /api/rooms/1/messages
+    const roomPathMatch = pathname.match(/\/api\/rooms\/(\d+)\/messages/);
+    let roomId = roomPathMatch ? roomPathMatch[1] : url.searchParams.get('room_id');
 
     // GET messages for a room
     if (request.method === 'GET') {
@@ -43,7 +47,12 @@ export default async (request: Request, context: Context) => {
     // POST new message
     if (request.method === 'POST') {
       const body = await request.json();
-      const { room_id, user_id, content } = body;
+      let { room_id, user_id, content } = body;
+      
+      // If room_id not in body, try to get from URL path
+      if (!room_id && roomId) {
+        room_id = roomId;
+      }
 
       if (!room_id || !user_id || !content) {
         return new Response(
@@ -86,5 +95,5 @@ export default async (request: Request, context: Context) => {
 };
 
 export const config = {
-  path: "/api/messages*"
+  path: ["/api/messages*", "/api/rooms/*/messages*"]
 };

@@ -7,7 +7,7 @@ import { Category, Room, Message } from '../models/chat.model';
   providedIn: 'root',
 })
 export class Api {
-  // Use relative URL - Netlify Edge Functions will handle /api/* requests
+  // Use relative URL - works both locally and on Netlify
   private apiUrl = '/api';
 
   constructor(private http: HttpClient) {}

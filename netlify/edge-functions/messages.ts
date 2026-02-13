@@ -1,5 +1,8 @@
 import type { Context } from "@netlify/edge-functions";
 
+// Mock messages storage
+let messages: any[] = [];
+
 export default async (request: Request, context: Context) => {
   // Set CORS headers
   const headers = {
@@ -27,18 +30,14 @@ export default async (request: Request, context: Context) => {
         );
       }
 
-      // TODO: Query Netlify DB when configured
-      const messages = [
-        {
-          id: 1,
-          room_id: roomId,
-          user_id: 1,
-          content: 'Sample message',
-          created_at: new Date().toISOString()
-        }
-      ];
+      const roomMessages = messages
+        .filter(m => m.room_id === parseInt(roomId))
+        .map(m => ({
+          ...m,
+          user: { id: m.user_id, name: m.user_name || 'User' }
+        }));
 
-      return new Response(JSON.stringify(messages), { headers });
+      return new Response(JSON.stringify(roomMessages), { headers });
     }
 
     // POST new message
@@ -53,16 +52,24 @@ export default async (request: Request, context: Context) => {
         );
       }
 
-      // TODO: Insert into Netlify DB when configured
       const newMessage = {
         id: Date.now(),
-        room_id,
-        user_id,
+        room_id: parseInt(room_id),
+        user_id: parseInt(user_id),
+        user_name: body.user_name || 'User',
         content,
         created_at: new Date().toISOString()
       };
 
-      return new Response(JSON.stringify(newMessage), { status: 201, headers });
+      messages.push(newMessage);
+
+      return new Response(
+        JSON.stringify({
+          ...newMessage,
+          user: { id: newMessage.user_id, name: newMessage.user_name }
+        }), 
+        { status: 201, headers }
+      );
     }
 
     return new Response(
@@ -79,5 +86,5 @@ export default async (request: Request, context: Context) => {
 };
 
 export const config = {
-  path: "/api/messages"
+  path: "/api/messages*"
 };

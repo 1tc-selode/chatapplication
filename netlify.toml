@@ -1,0 +1,20 @@
+[build]
+  # Build command
+  command = "cd frontend && npm install && npm run build"
+  # Directory that contains the deploy-ready HTML files and assets
+  publish = "frontend/dist/frontend/browser"
+
+# Redirect all requests to index.html for Angular routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "no-referrer"
